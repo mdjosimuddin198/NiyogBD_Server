@@ -2,6 +2,8 @@ const cors = require("cors");
 require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const express = require("express");
+// const jwt = require("jsonwebtoken");
+// const cookieParser = require("cookie-parser");
 const app = express();
 const port = 3000;
 
@@ -33,6 +35,23 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    app.post("/jobs", async (req, res) => {
+      const data = req.body;
+      const result = await jobCollection.insertOne(data);
+      res.send(result);
+    });
+
+    //jwt releted api
+
+    // app.post("/jwt_token", (req, res) => {
+    //   const { email } = req.body;
+    //   const userData = { email };
+    //   const token = jwt.sign({ userData }, process.env.API_SECRET, {
+    //     expiresIn: "1h",
+    //   });
+    //   res.send({ token });
+    // });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
